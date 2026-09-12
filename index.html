@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Eurovision Scoreboard</title>
+<style>
+:root{--y:#ffcc00;--y2:#fff36b;--bg:#101010;--card:#242424;--muted:#999}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#0d0d0d,#191919 60%,#302900);color:#fff;font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+button{font:inherit}.wrap{max-width:900px;margin:auto;padding:28px 16px 50px}
+.logo{font-weight:900;font-size:36px;margin:0}.yellow{color:var(--y)}.sub{color:#aaa;margin:6px 0 26px}
+.seasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.season{background:linear-gradient(145deg,#292929,#181818);border:2px solid #444;border-radius:16px;padding:20px;text-align:left;color:#fff;cursor:pointer;transition:.15s}
+.season:hover{transform:translateY(-3px);border-color:var(--y)}.season .year{font-size:34px;font-weight:900;color:var(--y)}
+.season .place{color:#aaa;margin-top:5px}.season .count{margin-top:15px;font-size:13px;color:#777}
+.hidden{display:none}.topbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.back{background:#222;color:#fff;border:1px solid #555;border-radius:9px;padding:9px 13px;cursor:pointer}.back:hover{border-color:var(--y)}
+h1{font-size:32px;margin:0}.tools{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}
+.action{border:3px solid #ffaa00;border-radius:9px;background:radial-gradient(circle,#fff36b,#ffcc00);color:#111;font-weight:900;padding:10px 14px;cursor:pointer}
+.hint{font-size:13px;color:#888;margin:0 0 13px}.list{display:flex;flex-direction:column;gap:7px}
+.song{display:grid;grid-template-columns:50px 1fr 78px 32px;gap:10px;align-items:center;background:var(--card);border:1px solid #444;border-radius:10px;padding:8px 10px;cursor:grab}
+.song.dragging{opacity:.4;border-color:var(--y)}.rank{text-align:center;font-weight:900;font-size:20px;color:var(--y)}
+.name{font-weight:900}.artist{font-size:13px;color:#aaa;margin-top:2px}.score{width:68px;background:#111;color:#fff;border:1px solid #666;border-radius:7px;padding:7px;text-align:center;font-weight:900}
+.grip{text-align:center;color:#777;font-size:20px}.arrows{display:none;gap:3px}.mini{background:#333;color:#fff;border:1px solid #555;border-radius:5px;width:25px;height:25px;cursor:pointer}
+.footer{text-align:center;color:#666;font-size:12px;margin-top:18px}
+@media(max-width:600px){.wrap{padding:20px 10px}.logo{font-size:29px}h1{font-size:26px}.song{grid-template-columns:38px 1fr 65px 55px}.score{width:58px}.grip{display:none}.arrows{display:flex;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section id="home">
+    <h1 class="logo">🇪🇺 My Eurovision <span class="yellow">Scoreboard</span></h1>
+    <div class="sub">Твой личный рейтинг Евровидения 🖤💛⚡</div>
+    <div class="seasons" id="seasons"></div>
+    <div class="footer">Локальный сайт • данные сохраняются в браузере</div>
+  </section>
+
+  <section id="board" class="hidden">
+    <div class="topbar"><button class="back" onclick="goHome()">← Сезоны</button><div><h1 id="title"></h1><div id="venue" class="sub" style="margin:3px 0 0"></div></div></div>
+    <div class="tools">
+      <button class="action" onclick="sortByScore()">↕ Сортировать по баллам</button>
+      <button class="action" onclick="resetSeason()">↩ Сбросить сезон</button>
+      <button class="action" onclick="savePNG()">🖼️ Сохранить рейтинг</button>
+    </div>
+    <div class="hint">🖱️ Перетаскивай песни мышкой. На телефоне — используй стрелки. Баллы 0–100 сохраняются автоматически.</div>
+    <div class="list" id="list"></div>
+    <div class="footer">My Eurovision Scoreboard • <span id="footerYear"></span></div>
+  </section>
+</div>
+
+<script>
+const SEASONS = {
+2023:{place:"Liverpool 🇬🇧", songs:[
+["🇦🇱","Albania","Albina & Familja Kelmendi","Duje"],["🇦🇲","Armenia","Brunette","Future Lover"],["🇦🇺","Australia","Voyager","Promise"],["🇦🇹","Austria","Teya & Salena","Who The Hell Is Edgar?"],["🇦🇿","Azerbaijan","TuralTuranX","Tell Me More"],["🇧🇪","Belgium","Gustaph","Because Of You"],["🇭🇷","Croatia","Let 3","Mama ŠČ!"],["🇨🇾","Cyprus","Andrew Lambrou","Break A Broken Heart"],["🇨🇿","Czechia","Vesna","My Sister's Crown"],["🇩🇰","Denmark","Reiley","Breaking My Heart"],["🇪🇪","Estonia","Alika","Bridges"],["🇫🇮","Finland","Käärijä","Cha Cha Cha"],["🇫🇷","France","La Zarra","Évidemment"],["🇬🇪","Georgia","Iru","Echo"],["🇩🇪","Germany","Lord of the Lost","Blood & Glitter"],["🇬🇷","Greece","Victor Vernicos","What They Say"],["🇮🇸","Iceland","Diljá","Power"],["🇮🇪","Ireland","Wild Youth","We Are One"],["🇮🇱","Israel","Noa Kirel","Unicorn"],["🇮🇹","Italy","Marco Mengoni","Due Vite"],["🇱🇻","Latvia","Sudden Lights","Aijā"],["🇱🇹","Lithuania","Monika Linkytė","Stay"],["🇲🇹","Malta","The Busker","Dance (Our Own Party)"],["🇲🇩","Moldova","Pasha Parfeni","Soarele şi Luna"],["🇳🇱","Netherlands","Mia Nicolai & Dion Cooper","Burning Daylight"],["🇳🇴","Norway","Alessandra","Queen of Kings"],["🇵🇱","Poland","Blanka","Solo"],["🇵🇹","Portugal","Mimicat","Ai Coração"],["🇷🇴","Romania","Theodor Andrei","D.G.T. (Off and On)"],["🇸🇲","San Marino","Piqued Jacks","Like An Animal"],["🇷🇸","Serbia","Luke Black","Samo Mi Se Spava"],["🇸🇮","Slovenia","Joker Out","Carpe Diem"],["🇪🇸","Spain","Blanca Paloma","Eaea"],["🇸🇪","Sweden","Loreen","Tattoo"],["🇨🇭","Switzerland","Remo Forrer","Watergun"],["🇺🇦","Ukraine","TVORCHI","Heart of Steel"],["🇬🇧","United Kingdom","Mae Muller","I Wrote A Song"]]},
+2024:{place:"Malmö 🇸🇪", songs:[
+["🇦🇱","Albania","BESA","TITAN"],["🇦🇲","Armenia","LADANIVA","Jako"],["🇦🇺","Australia","Electric Fields","One Milkali (One Blood)"],["🇦🇹","Austria","Kaleen","We Will Rave"],["🇦🇿","Azerbaijan","FAHREE feat. Ilkin Dovlatov","Özünlə Apar"],["🇧🇪","Belgium","Mustii","Before the Party's Over"],["🇭🇷","Croatia","Baby Lasagna","Rim Tim Tagi Dim"],["🇨🇾","Cyprus","Silia Kapsis","Liar"],["🇨🇿","Czechia","Aiko","Pedestal"],["🇩🇰","Denmark","SABA","SAND"],["🇪🇪","Estonia","5MIINUST x Puuluup","(nendest) narkootikumidest ei tea me (küll) midagi"],["🇫🇮","Finland","Windows95man","No Rules!"],["🇫🇷","France","Slimane","Mon amour"],["🇬🇪","Georgia","Nutsa Buzaladze","Firefighter"],["🇩🇪","Germany","ISAAK","Always On The Run"],["🇬🇷","Greece","Marina Satti","ZARI"],["🇮🇸","Iceland","Hera Björk","Scared of Heights"],["🇮🇪","Ireland","Bambie Thug","Doomsday Blue"],["🇮🇱","Israel","Eden Golan","Hurricane"],["🇮🇹","Italy","Angelina Mango","La noia"],["🇱🇻","Latvia","Dons","Hollow"],["🇱🇹","Lithuania","Silvester Belt","Luktelk"],["🇱🇺","Luxembourg","TALI","Fighter"],["🇲🇹","Malta","Sarah Bonnici","Loop"],["🇲🇩","Moldova","Natalia Barbu","In The Middle"],["🇳🇱","Netherlands","Joost Klein","Europapa"],["🇳🇴","Norway","Gåte","Ulveham"],["🇵🇱","Poland","LUNA","The Tower"],["🇵🇹","Portugal","iolanda","Grito"],["🇸🇲","San Marino","MEGARA","11:11"],["🇷🇸","Serbia","TEYA DORA","RAMONDA"],["🇸🇮","Slovenia","Raiven","Veronika"],["🇪🇸","Spain","Nebulossa","ZORRA"],["🇸🇪","Sweden","Marcus & Martinus","Unforgettable"],["🇨🇭","Switzerland","Nemo","The Code"],["🇺🇦","Ukraine","alyona alyona & Jerry Heil","Teresa & Maria"],["🇬🇧","United Kingdom","Olly Alexander","Dizzy"]]},
+2025:{place:"Basel 🇨🇭", songs:[
+["🇦🇱","Albania","Shkodra Elektronike","Zjerm"],["🇦🇲","Armenia","PARG","SURVIVOR"],["🇦🇺","Australia","Go-Jo","Milkshake Man"],["🇦🇹","Austria","JJ","Wasted Love"],["🇦🇿","Azerbaijan","Mamagama","Run With You"],["🇧🇪","Belgium","Red Sebastian","Strobe Lights"],["🇭🇷","Croatia","Marko Bošnjak","Poison Cake"],["🇨🇾","Cyprus","Theo Evan","Shh"],["🇨🇿","Czechia","ADONXS","Kiss Kiss Goodbye"],["🇩🇰","Denmark","Sissal","Hallucination"],["🇪🇪","Estonia","Tommy Cash","Espresso Macchiato"],["🇫🇮","Finland","Erika Vikman","ICH KOMME"],["🇫🇷","France","Louane","maman"],["🇬🇪","Georgia","Mariam Shengelia","Freedom"],["🇩🇪","Germany","Abor & Tynna","Baller"],["🇬🇷","Greece","Klavdia","Asteromáta"],["🇮🇸","Iceland","VÆB","RÓA"],["🇮🇪","Ireland","EMMY","Laika Party"],["🇮🇱","Israel","Yuval Raphael","New Day Will Rise"],["🇮🇹","Italy","Lucio Corsi","Volevo Essere Un Duro"],["🇱🇻","Latvia","Tautumeitas","Bur Man Laimi"],["🇱🇹","Lithuania","Katarsis","Tavo Akys"],["🇱🇺","Luxembourg","Laura Thorn","La Poupée Monte Le Son"],["🇲🇹","Malta","Miriana Conte","SERVING"],["🇲🇪","Montenegro","Nina Žižić","Dobrodošli"],["🇲🇩","Moldova","Satoshi","Balkan"],["🇳🇱","Netherlands","Claude","C'est La Vie"],["🇳🇴","Norway","Kyle Alessandro","Lighter"],["🇵🇱","Poland","Justyna Steczkowska","GAJA"],["🇵🇹","Portugal","NAPA","Deslocado"],["🇸🇲","San Marino","Gabry Ponte","Tutta L'Italia"],["🇷🇸","Serbia","Princ","Mila"],["🇸🇮","Slovenia","Klemen","How Much Time Do We Have Left"],["🇪🇸","Spain","Melody","ESA DIVA"],["🇸🇪","Sweden","KAJ","Bara Bada Bastu"],["🇨🇭","Switzerland","Zoë Më","Voyage"],["🇺🇦","Ukraine","Ziferblat","Bird of Pray"],["🇬🇧","United Kingdom","Remember Monday","What The Hell Just Happened?"]]},
+2026:{place:"Vienna 🇦🇹", songs:[
+["🇦🇱","Albania","Alis","Nân"],["🇦🇲","Armenia","SIMÓN","Paloma Rumba"],["🇦🇺","Australia","Delta Goodrem","Eclipse"],["🇦🇹","Austria","COSMÓ","Tanzschein"],["🇦🇿","Azerbaijan","JIVA","Just Go"],["🇧🇪","Belgium","ESSYLA","Dancing on the Ice"],["🇧🇬","Bulgaria","DARA","Bangaranga"],["🇭🇷","Croatia","LELEK","Andromeda"],["🇨🇾","Cyprus","Antigoni","JALLA"],["🇨🇿","Czechia","Daniel Zizka","CROSSROADS"],["🇩🇰","Denmark","Søren Torpegaard Lund","Før Vi Går Hjem"],["🇪🇪","Estonia","Vanilla Ninja","Too Epic To Be True"],["🇫🇮","Finland","Linda Lampenius x Pete Parkkonen","Liekinheitin"],["🇫🇷","France","Monroe","Regarde !"],["🇬🇪","Georgia","Bzikebi","On Replay"],["🇩🇪","Germany","Sarah Engels","Fire"],["🇬🇷","Greece","Akylas","Ferto"],["🇮🇱","Israel","Noam Bettan","Michelle"],["🇮🇹","Italy","Sal Da Vinci","Per Sempre Sì"],["🇱🇻","Latvia","Atvara","Ēnā"],["🇱🇹","Lithuania","Lion Ceccah","Sólo Quiero Más"],["🇱🇺","Luxembourg","Eva Marija","Mother Nature"],["🇲🇹","Malta","AIDAN","Bella"],["🇲🇩","Moldova","Satoshi","Viva, Moldova!"],["🇲🇪","Montenegro","Tamara Živković","Nova Zora"],["🇳🇴","Norway","JONAS LOVV","YA YA YA"],["🇵🇱","Poland","ALICJA","Pray"],["🇵🇹","Portugal","Bandidos do Cante","Rosa"],["🇷🇴","Romania","Alexandra Căpitănescu","Choke Me"],["🇸🇲","San Marino","SENHIT","Superstar"],["🇷🇸","Serbia","LAVINA","Kraj Mene"],["🇸🇪","Sweden","FELICIA","My System"],["🇨🇭","Switzerland","Veronica Fusaro","Alice"],["🇺🇦","Ukraine","LELÉKA","Ridnym"],["🇬🇧","United Kingdom","LOOK MUM NO COMPUTER","Eins, Zwei, Drei"]]}
+};
+
+let season=null,data=[],dragId=null;
+const $=id=>document.getElementById(id);
+
+function initHome(){
+  $("seasons").innerHTML="";
+  Object.keys(SEASONS).sort((a,b)=>b-a).forEach(y=>{
+    const b=document.createElement("button"); b.className="season";
+    b.innerHTML=`<div class="year">${y}</div><div class="place">${SEASONS[y].place}</div><div class="count">${SEASONS[y].songs.length} участников</div>`;
+    b.onclick=()=>openSeason(y); $("seasons").appendChild(b);
+  });
+}
+function openSeason(y){
+  season=String(y); const key="meScore_"+season;
+  const base=SEASONS[y].songs.map((s,i)=>({id:i,flag:s[0],country:s[1],artist:s[2],song:s[3],score:0}));
+  data=JSON.parse(localStorage.getItem(key))||base;
+  $("home").classList.add("hidden");$("board").classList.remove("hidden");
+  $("title").textContent="Eurovision "+season;$("venue").textContent=SEASONS[y].place;
+  $("footerYear").textContent=season;render();
+}
+function goHome(){$("board").classList.add("hidden");$("home").classList.remove("hidden");}
+function save(){localStorage.setItem("meScore_"+season,JSON.stringify(data))}
+function render(){
+  $("list").innerHTML="";
+  data.forEach((s,i)=>{
+    const el=document.createElement("div");el.className="song";el.draggable=true;el.dataset.id=s.id;
+    el.innerHTML=`<div class="rank">${i+1}</div><div><div class="name">${s.flag} ${s.country}</div><div class="artist">${s.artist} — ${s.song}</div></div>
+    <input class="score" type="number" min="0" max="100" value="${s.score}" aria-label="Баллы">
+    <div class="grip">☰</div><div class="arrows"><button class="mini" onclick="move(${s.id},-1)">▲</button><button class="mini" onclick="move(${s.id},1)">▼</button></div>`;
+    el.addEventListener("dragstart",()=>{dragId=s.id;el.classList.add("dragging")});
+    el.addEventListener("dragend",()=>{dragId=null;el.classList.remove("dragging")});
+    el.addEventListener("dragover",e=>e.preventDefault());
+    el.addEventListener("drop",e=>{e.preventDefault();moveTo(s.id)});
+    el.querySelector(".score").addEventListener("input",e=>{s.score=Math.max(0,Math.min(100,Number(e.target.value)||0));save()});
+    $("list").appendChild(el);
+  });
+}
+function moveTo(targetId){
+  if(dragId==null||dragId===targetId)return;
+  const a=data.findIndex(x=>x.id===dragId),b=data.findIndex(x=>x.id===targetId);
+  const [x]=data.splice(a,1);data.splice(b,0,x);save();render();
+}
+function move(id,dir){
+  const i=data.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=data.length)return;
+  [data[i],data[j]]=[data[j],data[i]];save();render();
+}
+function sortByScore(){data.sort((a,b)=>b.score-a.score);save();render()}
+function resetSeason(){
+  if(!confirm("Сбросить порядок и все баллы этого сезона?"))return;
+  data=SEASONS[season].songs.map((s,i)=>({id:i,flag:s[0],country:s[1],artist:s[2],song:s[3],score:0}));
+  save();render();
+}
+function savePNG(){
+  const scale=2,w=1200,row=62,top=150,h=top+row*data.length+50;
+  const c=document.createElement("canvas");c.width=w*scale;c.height=h*scale;const ctx=c.getContext("2d");ctx.scale(scale,scale);
+  const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,"#101010");g.addColorStop(1,"#332b00");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  ctx.fillStyle="#ffcc00";ctx.font="900 42px Arial";ctx.fillText("🇪🇺 My Eurovision Scoreboard",50,58);
+  ctx.fillStyle="#ddd";ctx.font="22px Arial";ctx.fillText("Eurovision "+season+" • "+SEASONS[season].place,50,95);
+  data.forEach((s,i)=>{
+    const y=top+i*row;ctx.fillStyle="#242424";round(ctx,35,y,w-70,row-7,10);ctx.fill();
+    ctx.fillStyle="#ffcc00";ctx.font="900 24px Arial";ctx.textAlign="center";ctx.fillText(i+1,72,y+34);
+    ctx.textAlign="left";ctx.fillStyle="#fff";ctx.font="800 19px Arial";ctx.fillText(s.flag+"  "+s.country,110,y+25);
+    ctx.fillStyle="#aaa";ctx.font="15px Arial";ctx.fillText(s.artist+" — "+s.song,110,y+47);
+    ctx.fillStyle="#ffcc00";ctx.font="900 22px Arial";ctx.textAlign="right";ctx.fillText((s.score||0)+" pts",w-65,y+36);ctx.textAlign="left";
+  });
+  const a=document.createElement("a");a.download=`Eurovision_${season}_Scoreboard.png`;a.href=c.toDataURL("image/png");a.click();
+}
+function round(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+initHome();
+</script>
+</body>
+</html>

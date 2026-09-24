@@ -10,9 +10,9 @@
 
 :root{--y:#ffcc00;--y2:#fff36b;--bg:#101010;--card:#242424;--muted:#999}
 *{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#0d0d0d,#191919 60%,#302900);color:#fff;font-family:'Comfortaa',Arial,Helvetica,sans-serif;min-height:100vh}
-button{font:inherit}.wrap{max-width:900px;margin:auto;padding:140px 16px 50px}
-.site-logo{position:fixed;top:18px;left:20px;width:100px;height:auto;z-index:100;pointer-events:none}
-@media(max-width:600px){.site-logo{top:12px;left:12px;width:72px}.wrap{padding-top:105px}}
+button{font:inherit}.wrap{position:relative;z-index:1;max-width:900px;margin:auto;padding:140px 16px 50px}
+.site-logo{position:fixed;top:18px;left:20px;width:50px;height:auto;z-index:0;pointer-events:none;opacity:.9}
+@media(max-width:600px){.site-logo{top:12px;left:12px;width:40px}.wrap{padding-top:105px}}
 .brand{margin-bottom:10px}.brand img{display:block;width:min(310px,78vw);height:auto}.logo{font-weight:900;font-size:36px;margin:0}.yellow{color:var(--y)}.sub{color:#aaa;margin:6px 0 26px}
 .seasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
 .season{background:linear-gradient(145deg,#292929,#181818);border:2px solid #444;border-radius:16px;padding:20px;text-align:left;color:#fff;cursor:pointer;transition:.15s}
@@ -87,7 +87,7 @@ function svgFlag(code){
   let body="";
   switch(code){
     case"AD": body=v(["#001f8b","#fedd00","#d50032"]);break;
-    case"BA": body=rect(0,0,W,H,"#002395")+`<path d="M10 0L28 0L28 20L10 20L0 10z" fill="#f7d116"/>`+Array.from({length:7},(_,i)=>`<circle cx="${16+i*1.7}" cy="${2.2+i*2.6}" r=".75" fill="#fff"/>`).join("");break;
+    case"BA": body=rect(0,0,W,H,"#002395")+`<path d="M0 0L28 0L28 20L0 20Z" fill="#002395"/>`+`<path d="M0 0L28 0L28 20Z" fill="#f7d116"/>`;break;
     case"BY": body=h(["#c8313e","#c8313e","#2e8b57"])+`<rect x="0" y="0" width="4" height="20" fill="#fff"/>`;break;
     case"HU": body=h(["#ce2939","#fff","#477050"]);break;
     case"MC": body=h(["#ce1126","#fff"]);break;
@@ -328,7 +328,7 @@ function render(){
   $("list").innerHTML="";
   data.forEach((s,i)=>{
     const el=document.createElement("div");el.className="song";el.draggable=true;el.dataset.id=s.id;
-    el.innerHTML=`<div class="rank">${i+1}</div><div><div class="name"><span class="flag-wrap">${svgFlag(s.flag)}<span>${s.country}</span></span></div><div class="artist">${s.artist} — ${s.song}</div></div>
+    el.innerHTML=`<div class="rank">${i+1}</div><div><div class="name"><span class="flag-wrap">${svgFlag(flagCode(s.flag))}<span>${s.country}</span></span></div><div class="artist">${s.artist} — ${s.song}</div></div>
     <input class="score" type="number" min="0" max="100" value="${s.score}" aria-label="Баллы">
     <div class="grip">☰</div><div class="arrows"><button class="mini" onclick="move(${s.id},-1)">▲</button><button class="mini" onclick="move(${s.id},1)">▼</button></div>`;
     el.addEventListener("dragstart",e=>{

@@ -24,14 +24,14 @@ button{font:inherit}.wrap{position:relative;z-index:1;max-width:900px;margin:aut
 .hidden{display:none}.topbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}.topbar .sub{margin:3px 0 0}
 .back{background:#222;color:#fff;border:1px solid #555;border-radius:9px;padding:9px 13px;cursor:pointer}.back:hover{border-color:var(--y)}
 h1{font-size:32px;margin:0}.tools{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}
-.action{border:3px solid #ffaa00;border-radius:9px;background:radial-gradient(circle,#fff36b,#ffcc00);color:#111;font-weight:900;padding:10px 14px;cursor:pointer}
+.action{border:3px solid #ffaa00;border-radius:9px;background:radial-gradient(circle,#fff36b,#ffcc00);color:#111;font-weight:900;padding:10px 14px;cursor:pointer}.points-panel{display:none;position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:20}.points-panel.page-visible{display:block}.points-panel:not(.active){background:transparent;border:0;box-shadow:none;padding:0}.points-active-content{display:none}.points-panel.active .points-active-content{display:block}.points-controls{display:flex;flex-direction:column;gap:7px;margin:0 0 9px}.points-controls .action{padding:8px 12px;min-width:110px}.points-grid{display:grid;grid-template-columns:repeat(2,58px);gap:8px;background:#171717;border:2px solid #555;border-radius:14px;padding:12px;box-shadow:0 12px 35px rgba(0,0,0,.45)}.point-pill{height:48px;border-radius:10px;border:2px solid #ffaa00;background:radial-gradient(circle,#fff36b,#ffcc00);color:#111;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:grab;user-select:none}.point-pill.assigned{opacity:.45}.points-slot{display:none;width:max-content;min-width:54px;height:27px;border:1px dashed #666;border-radius:7px;color:#777;font-size:12px;align-items:center;justify-content:center;padding:0 9px}.points-mode .points-slot{display:flex}.points-slot.filled{border-color:#ffcc00;background:#332b00;color:#ffcc00;font-weight:900}.points-mode .song{padding-bottom:10px}body.points-page #board,body.points-page #mixBoard{padding-right:0}@media(max-width:700px){.points-panel{right:10px;top:auto;bottom:12px;transform:none}.points-grid{grid-template-columns:repeat(2,54px);gap:6px}.point-pill{height:42px}.points-controls .action{padding:7px 10px}body.points-page #board,body.points-page #mixBoard{padding-right:0;padding-bottom:180px}}
 .hint{font-size:13px;color:#888;margin:0 0 13px}.list{display:flex;flex-direction:column;gap:7px}
-.song{display:grid;grid-template-columns:50px 1fr 78px 32px;gap:10px;align-items:center;background:var(--card);border:1px solid #444;border-radius:10px;padding:8px 10px;cursor:grab}
-.song.dragging{opacity:.4;border-color:var(--y)}.mix-song{grid-template-columns:50px 1fr 68px 32px 55px}.mix-song .arrows{display:none}.mix-points{text-align:center;color:var(--y);font-weight:900;font-size:15px}.rank{text-align:center;font-weight:900;font-size:20px;color:var(--y)}
+.song{display:grid;grid-template-columns:50px minmax(0,1fr) 78px 78px 32px;gap:10px;align-items:center;background:var(--card);border:1px solid #444;border-radius:10px;padding:8px 10px;cursor:grab}
+.song.dragging{opacity:.4;border-color:var(--y)}.mix-song{grid-template-columns:50px minmax(0,1fr) 68px 78px 32px 55px}.mix-song .arrows{display:none}.mix-points{text-align:center;color:var(--y);font-weight:900;font-size:15px}.rank{text-align:center;font-weight:900;font-size:20px;color:var(--y)}
 .name{font-weight:900}.artist{font-size:13px;color:#aaa;margin-top:2px}.score{width:68px;background:#111;color:#fff;border:1px solid #666;border-radius:7px;padding:7px;text-align:center;font-weight:900}
 .grip{text-align:center;color:#777;font-size:20px}.arrows{display:none;gap:3px}.mini{background:#333;color:#fff;border:1px solid #555;border-radius:5px;width:25px;height:25px;cursor:pointer}
 .footer{text-align:center;color:#666;font-size:12px;margin-top:18px}
-@media(max-width:600px){.wrap{padding:20px 10px}.logo{font-size:29px}h1{font-size:26px}.song{grid-template-columns:38px 1fr 65px 55px}.mix-song{grid-template-columns:38px 1fr 58px 55px!important}.mix-points{font-size:14px}.score{width:58px}.grip{display:none}.arrows{display:flex;flex-direction:column}}
+@media(max-width:600px){.wrap{padding:20px 10px}.logo{font-size:29px}h1{font-size:26px}.song{grid-template-columns:38px minmax(0,1fr) 65px 55px 55px}.mix-song{grid-template-columns:38px minmax(0,1fr) 58px 55px 55px!important}.mix-points{font-size:14px}.score{width:58px}.grip{display:none}.arrows{display:flex;flex-direction:column}}
 
 .flag-icon{display:inline-block;width:28px;height:20px;vertical-align:-4px;border-radius:2px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.16);flex:none}
 .flag-icon svg{display:block;width:100%;height:100%}
@@ -45,7 +45,7 @@ h1{font-size:32px;margin:0}.tools{display:flex;flex-wrap:wrap;gap:9px;margin:14p
   <section id="home">
     <div class="home-headrow">
       <h1 class="logo">Euro<span class="yellow">RANKS</span></h1>
-      <div class="mix-controls"><button class="action" id="mixToggle" onclick="toggleMixMode()">＋ Mix seasons</button></div>
+      <div class="mix-controls"><button class="action" id="mixToggle" onclick="toggleMixMode()">＋ Несколько сезонов</button></div>
     </div>
     <div class="home-subrow">
       <div class="sub">Твой личный рейтинг Евровидения</div>
@@ -58,21 +58,34 @@ h1{font-size:32px;margin:0}.tools{display:flex;flex-wrap:wrap;gap:9px;margin:14p
     <div class="topbar"><button class="back" onclick="goHome()">← Сезоны</button><div><h1 id="title"></h1><div id="venue" class="sub" style="margin:3px 0 0"></div></div></div>
     <div class="tools">
       <button class="action" onclick="sortByScore()">↕ Сортировать по баллам</button>
-      <button class="action" onclick="resetSeason()">↩ Сбросить сезон</button>
+      <button class="action" onclick="resetSeason()">↩ Обнулить баллы</button>
       <button class="action" onclick="savePNG()">🖼️ Сохранить рейтинг</button>
     </div>
-    <div class="hint">🖱️ Перетаскивай песни мышкой. На телефоне — используй стрелки. Баллы 0–100 сохраняются автоматически.</div>
+    <div class="hint">Перетаскивай песни мышкой. На телефоне — используй стрелки. Баллы 0–1000 сохраняются автоматически.</div>
     <div class="list" id="list"></div>
     <div class="footer">EuroRanks • <span id="footerYear"></span></div>
   </section>
 
   <section id="mixBoard" class="hidden">
     <div class="topbar"><button class="back" onclick="goHome()">← Сезоны</button><div><h1 id="mixTitle"></h1><div id="mixVenue" class="sub" style="margin:3px 0 0"></div></div></div>
-    <div class="tools"><button class="action" onclick="sortMixByScore()">↕ Сортировать по баллам</button><button class="action" onclick="saveMixPNG()">🖼️ Сохранить топ</button></div>
-    <div class="hint">🖱️ Перетаскивай песни мышкой. На телефоне — используй стрелки. Баллы 0–100 сохраняются автоматически. В сохранённой картинке баллы не отображаются.</div>
+    <div class="tools"><button class="action" onclick="sortMixByScore()">↕ Сортировать по баллам</button><button class="action" onclick="resetMixScores()">↩ Обнулить баллы</button><button class="action" onclick="saveMixPNG()">🖼️ Сохранить топ</button></div>
+    <div class="hint">🖱️ Перетаскивай песни мышкой. На телефоне — используй стрелки. Баллы 0–1000 сохраняются автоматически. В сохранённой картинке баллы не отображаются.</div>
     <div class="list" id="mixList"></div>
     <div class="footer">EuroRanks • <span id="mixFooterCount"></span></div>
   </section>
+  <div id="pointsPanel" class="points-panel" aria-label="12 очков">
+    <button class="action" id="pointsStart" onclick="togglePointsMode()">12 очков</button>
+    <div class="points-active-content" id="pointsActiveContent">
+      <div class="points-controls"><button class="action" id="pointsDone" onclick="finishPointsMode(true)">готово</button><button class="action" onclick="endPointsMode(true)">отмена</button></div>
+      <div class="points-grid">
+        <div class="point-pill" draggable="true" data-points="12">12</div><div class="point-pill" draggable="true" data-points="10">10</div>
+        <div class="point-pill" draggable="true" data-points="8">8</div><div class="point-pill" draggable="true" data-points="7">7</div>
+        <div class="point-pill" draggable="true" data-points="6">6</div><div class="point-pill" draggable="true" data-points="5">5</div>
+        <div class="point-pill" draggable="true" data-points="4">4</div><div class="point-pill" draggable="true" data-points="3">3</div>
+        <div class="point-pill" draggable="true" data-points="2">2</div><div class="point-pill" draggable="true" data-points="1">1</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -289,7 +302,7 @@ async function loadHistoricalSeasons(){
   }
 }
 
-let season=null,data=[],mixData=[],mixYears=[],mixMode=false,dragId=null,dragEl=null;
+let season=null,data=[],mixData=[],mixYears=[],mixMode=false,dragId=null,dragEl=null,pointsMode=false,pointAssignments=new Map(),dragPoint=null;
 const $=id=>document.getElementById(id);
 
 function siteBase(){
@@ -302,27 +315,26 @@ function seasonURL(y){return siteBase()+String(y)+"/";}
 function mixURL(years){return siteBase()+"mix/?seasons="+years.map(String).join(",");}
 function currentSeasonFromURL(){const m=location.pathname.match(/(?:^|\/)((?:20)\d{2})\/?$/);const y=m?m[1]:null;return y&&SEASONS[y]?y:null;}
 function currentMixYearsFromURL(){if(!/\/mix\/?$/.test(location.pathname))return [];const raw=new URLSearchParams(location.search).get("seasons")||"";return raw.split(",").map(String).filter(y=>SEASONS[y]).filter((y,i,a)=>a.indexOf(y)===i);}
+function setPointsPanelVisibility(visible){const panel=$("pointsPanel");if(panel)panel.classList.toggle("page-visible",!!visible);document.body.classList.toggle("points-page",!!visible);}
 function initHome(push=false){
-  mixMode=false;mixYears=[];const toggle=$("mixToggle");if(toggle)toggle.textContent="＋ Mix seasons";$('seasons').innerHTML="";
+  setPointsPanelVisibility(false);mixMode=false;mixYears=[];const toggle=$("mixToggle");if(toggle)toggle.textContent="＋ Несколько сезонов";$('seasons').innerHTML="";
   Object.keys(SEASONS).sort((a,b)=>b-a).forEach(y=>{const b=document.createElement("button");b.className="season";b.innerHTML=`<div class="year">${y}</div><div class="place"><span class="flag-wrap">${svgFlag(HOST_FLAGS[y])}<span>${SEASONS[y].place}</span></span></div><div class="count">${SEASONS[y].songs.length} участников</div>`;b.onclick=()=>openSeason(y);$("seasons").appendChild(b);});
   $("mixBoard").classList.add("hidden");$("board").classList.add("hidden");$("home").classList.remove("hidden");if(push)history.pushState({page:"home"},"",siteBase());
 }
 function toggleMixMode(){if(mixMode){finishMix();return;}mixMode=true;const toggle=$("mixToggle");toggle.textContent="Done";[...$("seasons").children].forEach(card=>{const y=card.querySelector(".year")?.textContent;card.classList.add("mix-mode");const cb=document.createElement("input");cb.type="checkbox";cb.dataset.year=y;cb.checked=mixYears.includes(y);cb.addEventListener("click",e=>e.stopPropagation());cb.addEventListener("change",()=>{card.classList.toggle("selected",cb.checked);if(cb.checked){if(!mixYears.includes(y))mixYears.push(y)}else mixYears=mixYears.filter(v=>v!==y);});card.classList.toggle("selected",cb.checked);card.appendChild(cb);card.onclick=()=>{cb.checked=!cb.checked;cb.dispatchEvent(new Event("change"));};});}
-function openSeason(y,push=true){y=String(y);if(!SEASONS[y])return;season=y;const key="meScore_"+season;const base=SEASONS[y].songs.map((s,i)=>({id:i,flag:flagCode(s[0]),country:s[1],artist:s[2],song:s[3],score:0}));data=JSON.parse(localStorage.getItem(key))||base;$("home").classList.add("hidden");$("mixBoard").classList.add("hidden");$("board").classList.remove("hidden");$("title").textContent="Eurovision "+season;$("venue").innerHTML=`<span class="flag-wrap">${svgFlag(HOST_FLAGS[y])}<span>${SEASONS[y].place}</span></span>`;$("footerYear").textContent=season;render();if(push)history.pushState({page:"season",season:y},"",seasonURL(y));}
-function buildMixData(years){const key="mix_"+years.slice().sort().join("_");const base=[];years.forEach(y=>SEASONS[y].songs.forEach((s,i)=>base.push({id:`${y}-${i}`,year:y,flag:flagCode(s[0]),country:s[1],artist:s[2],song:s[3],score:0})));const saved=JSON.parse(localStorage.getItem(key)||"null");if(!Array.isArray(saved)||saved.length!==base.length)return base;const byId=new Map(base.map(x=>[x.id,x]));return saved.map(x=>{const item=byId.get(x.id);if(item)item.score=Math.max(0,Math.min(100,Number(x.score)||0));return item;}).filter(Boolean).concat(base.filter(x=>!saved.some(y=>y.id===x.id)));}
-function openMix(years,push=true){years=[...new Set(years.map(String).filter(y=>SEASONS[y]))];if(years.length<2)return;mixYears=years;mixData=buildMixData(years);$("home").classList.add("hidden");$("board").classList.add("hidden");$("mixBoard").classList.remove("hidden");$("mixTitle").textContent=`Top ${mixData.length}`;$("mixVenue").textContent=years.slice().sort((a,b)=>b-a).join(" • ");$("mixFooterCount").textContent=`${years.length} сезона • ${mixData.length} песен`;renderMix();if(push)history.pushState({page:"mix",years},"",mixURL(years));}
+function openSeason(y,push=true){setPointsPanelVisibility(true);y=String(y);if(!SEASONS[y])return;season=y;const key="meScore_"+season;const base=SEASONS[y].songs.map((s,i)=>({id:i,flag:flagCode(s[0]),country:s[1],artist:s[2],song:s[3],score:0}));const saved=JSON.parse(localStorage.getItem(key)||"null");if(Array.isArray(saved)){const byId=new Map(base.map(x=>[x.id,x]));data=saved.map(x=>{const item=byId.get(Number(x.id));if(item)item.score=Math.max(0,Math.min(1000,Number(x.score)||0));return item;}).filter(Boolean).concat(base.filter(x=>!saved.some(y=>Number(y.id)===x.id)));}else data=base;endPointsMode(false);$("home").classList.add("hidden");$("mixBoard").classList.add("hidden");$("board").classList.remove("hidden");$("title").textContent="Eurovision "+season;$("venue").innerHTML=`<span class="flag-wrap">${svgFlag(HOST_FLAGS[y])}<span>${SEASONS[y].place}</span></span>`;$("footerYear").textContent=season;render();if(push)history.pushState({page:"season",season:y},"",seasonURL(y));}
+function buildMixData(years){const key="mix_"+years.slice().sort().join("_");const base=[];years.forEach(y=>{const savedSeason=JSON.parse(localStorage.getItem("meScore_"+y)||"null");const scoreMap=new Map(Array.isArray(savedSeason)?savedSeason.map(x=>[Number(x.id),Math.max(0,Math.min(1000,Number(x.score)||0))]):[]);SEASONS[y].songs.forEach((s,i)=>base.push({id:`${y}-${i}`,year:y,flag:flagCode(s[0]),country:s[1],artist:s[2],song:s[3],score:scoreMap.get(i)||0}));});const saved=JSON.parse(localStorage.getItem(key)||"null");if(!Array.isArray(saved))return base;const byId=new Map(base.map(x=>[x.id,x]));return saved.map(x=>byId.get(x.id)).filter(Boolean).concat(base.filter(x=>!saved.some(y=>y.id===x.id)));}
+function openMix(years,push=true){setPointsPanelVisibility(true);endPointsMode(false);years=[...new Set(years.map(String).filter(y=>SEASONS[y]))];if(years.length<2)return;mixYears=years;mixData=buildMixData(years);$("home").classList.add("hidden");$("board").classList.add("hidden");$("mixBoard").classList.remove("hidden");$("mixTitle").textContent=`Top ${mixData.length}`;$("mixVenue").textContent=years.slice().sort((a,b)=>b-a).join(" • ");$("mixFooterCount").textContent=`${years.length} сезона • ${mixData.length} песен`;renderMix();if(push)history.pushState({page:"mix",years},"",mixURL(years));}
 function finishMix(){const selected=[...$("seasons").querySelectorAll('input[type="checkbox"]:checked')].map(cb=>cb.dataset.year);if(selected.length<2){alert("Выбери хотя бы два сезона для смешения.");return;}openMix(selected,true);}
-function goHome(push=true){if(push)history.pushState({page:"home"},"",siteBase());$("mixBoard").classList.add("hidden");$("board").classList.add("hidden");$("home").classList.remove("hidden");mixMode=false;mixYears=[];const toggle=$("mixToggle");if(toggle)toggle.textContent="＋ Mix seasons";[...$("seasons").children].forEach(card=>{card.classList.remove("mix-mode","selected");const cb=card.querySelector("input[type=checkbox]");if(cb)cb.remove();const y=card.querySelector(".year")?.textContent;card.onclick=()=>openSeason(y);});}
+function goHome(push=true){setPointsPanelVisibility(false);endPointsMode(false);if(push)history.pushState({page:"home"},"",siteBase());$("mixBoard").classList.add("hidden");$("board").classList.add("hidden");$("home").classList.remove("hidden");mixMode=false;mixYears=[];const toggle=$("mixToggle");if(toggle)toggle.textContent="＋ Несколько сезонов";[...$("seasons").children].forEach(card=>{card.classList.remove("mix-mode","selected");const cb=card.querySelector("input[type=checkbox]");if(cb)cb.remove();const y=card.querySelector(".year")?.textContent;card.onclick=()=>openSeason(y);});}
 window.addEventListener("popstate",()=>{const y=currentSeasonFromURL(),years=currentMixYearsFromURL();if(years.length>=2)openMix(years,false);else if(y)openSeason(y,false);else initHome(false);});
 document.addEventListener("keydown",e=>{if(!e.altKey)return;if(e.key==="Home"){e.preventDefault();goHome(true);}if(e.key==="End"&&season){e.preventDefault();openSeason(season,true);}});
-function save(){localStorage.setItem("meScore_"+season,JSON.stringify(data))}
+function save(){localStorage.setItem("meScore_"+season,JSON.stringify(data.map(x=>({...x,score:Math.max(0,Math.min(1000,Number(x.score)||0))}))));}
 function render(){
   $("list").innerHTML="";
   data.forEach((s,i)=>{
     const el=document.createElement("div");el.className="song";el.draggable=true;el.dataset.id=s.id;
-    el.innerHTML=`<div class="rank">${i+1}</div><div><div class="name"><span class="flag-wrap">${svgFlag(flagCode(s.flag))}<span>${s.country}</span></span></div><div class="artist">${s.artist} — ${s.song}</div></div>
-    <input class="score" type="number" min="0" max="100" value="${s.score}" aria-label="Баллы">
-    <div class="grip">☰</div><div class="arrows"><button class="mini" onclick="move(${s.id},-1)">▲</button><button class="mini" onclick="move(${s.id},1)">▼</button></div>`;
+    el.innerHTML=`<div class="rank">${i+1}</div><div><div class="name"><span class="flag-wrap">${svgFlag(flagCode(s.flag))}<span>${s.country}</span></span></div><div class="artist">${s.artist} — ${s.song}</div></div><input class="score" type="number" min="0" max="1000" value="${s.score}" aria-label="Баллы"><div class="points-slot" data-id="${s.id}">＋ очки</div><div class="grip">☰</div><div class="arrows"><button class="mini" onclick="move(${s.id},-1)">▲</button><button class="mini" onclick="move(${s.id},1)">▼</button></div>`;
     el.addEventListener("dragstart",e=>{
       dragId=s.id; dragEl=el; el.classList.add("dragging");
       e.dataTransfer.effectAllowed="move";
@@ -343,8 +355,9 @@ function render(){
       }
     });
     el.addEventListener("drop",e=>{e.preventDefault()});
-    el.querySelector(".score").addEventListener("input",e=>{s.score=Math.max(0,Math.min(100,Number(e.target.value)||0));save()});
+    el.querySelector(".score").addEventListener("input",e=>{s.score=Math.max(0,Math.min(1000,Number(e.target.value)||0));save();syncPointSlots()});
     $("list").appendChild(el);
+    bindPointSlot(el.querySelector(".points-slot"));
   });
 }
 function syncDataFromDOM(){
@@ -358,29 +371,37 @@ function move(id,dir){
   [data[i],data[j]]=[data[j],data[i]];save();render();
 }
 function sortByScore(){data.sort((a,b)=>b.score-a.score);save();render()}
-function resetSeason(){
-  if(!confirm("Сбросить порядок и все баллы этого сезона?"))return;
-  data=SEASONS[season].songs.map((s,i)=>({id:i,flag:flagCode(s[0]),country:s[1],artist:s[2],song:s[3],score:0}));
-  save();render();
-}
+function resetSeason(){if(!confirm("Обнулить все баллы этого сезона? Порядок песен останется без изменений."))return;data.forEach(s=>s.score=0);save();render();}
 function renderMix(){
   $("mixList").innerHTML="";
   mixData.forEach((s,i)=>{
     const el=document.createElement("div");
     el.className="song mix-song";el.draggable=true;el.dataset.id=s.id;
-    el.innerHTML=`<div class="rank">${i+1}</div><div><div class="name"><span class="flag-wrap">${svgFlag(s.flag)}<span>${s.country}</span></span> <span style="color:#777;font-size:11px">${s.year}</span></div><div class="artist">${s.artist} — ${s.song}</div></div><input class="score" type="number" min="0" max="100" value="${s.score||0}" aria-label="Баллы"><div class="grip">☰</div><div class="arrows"><button class="mini" onclick="moveMix(${JSON.stringify(s.id)},-1)">▲</button><button class="mini" onclick="moveMix(${JSON.stringify(s.id)},1)">▼</button></div>`;
+    el.innerHTML=`<div class="rank">${i+1}</div><div><div class="name"><span class="flag-wrap">${svgFlag(s.flag)}<span>${s.country}</span></span> <span style="color:#777;font-size:11px">${s.year}</span></div><div class="artist">${s.artist} — ${s.song}</div></div><input class="score" type="number" min="0" max="1000" value="${s.score||0}" aria-label="Баллы"><div class="points-slot" data-id="${s.id}">＋ очки</div><div class="grip">☰</div><div class="arrows"><button class="mini" onclick="moveMix(${JSON.stringify(s.id)},-1)">▲</button><button class="mini" onclick="moveMix(${JSON.stringify(s.id)},1)">▼</button></div>`;
     el.addEventListener("dragstart",e=>{dragId=s.id;dragEl=el;el.classList.add("dragging");e.dataTransfer.effectAllowed="move"});
     el.addEventListener("dragend",()=>{if(dragEl)dragEl.classList.remove("dragging");dragId=null;dragEl=null;syncMixFromDOM();saveMix();renderMix()});
     el.addEventListener("dragover",e=>{e.preventDefault();if(!dragEl||el===dragEl)return;const rect=el.getBoundingClientRect(),after=e.clientY>rect.top+rect.height/2;if(after){if(el.nextSibling!==dragEl)$("mixList").insertBefore(dragEl,el.nextSibling)}else{if(el.previousSibling!==dragEl)$("mixList").insertBefore(dragEl,el)}});
     el.addEventListener("drop",e=>e.preventDefault());
-    el.querySelector(".score").addEventListener("input",e=>{s.score=Math.max(0,Math.min(100,Number(e.target.value)||0));saveMix()});
+    el.querySelector(".score").addEventListener("input",e=>{s.score=Math.max(0,Math.min(1000,Number(e.target.value)||0));syncMixScoreToSeason(s);saveMix();syncPointSlots()});
     $("mixList").appendChild(el);
+    bindPointSlot(el.querySelector(".points-slot"));
   });
 }
 function syncMixFromDOM(){const order=[...$("mixList").children].map(el=>el.dataset.id),byId=new Map(mixData.map(x=>[x.id,x]));mixData=order.map(id=>byId.get(id)).filter(Boolean);}
 function moveMix(id,dir){const i=mixData.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=mixData.length)return;[mixData[i],mixData[j]]=[mixData[j],mixData[i]];saveMix();renderMix();}
 function sortMixByScore(){mixData.sort((a,b)=>(Number(b.score)||0)-(Number(a.score)||0));saveMix();renderMix();}
+function syncMixScoreToSeason(s){const y=String(s.year),id=Number(String(s.id).split("-").pop());const saved=JSON.parse(localStorage.getItem("meScore_"+y)||"null");const arr=Array.isArray(saved)?saved:SEASONS[y].songs.map((song,i)=>({id:i,score:0}));let item=arr.find(x=>Number(x.id)===id);if(!item){item={id,score:0};arr.push(item)}item.score=Math.max(0,Math.min(1000,Number(s.score)||0));localStorage.setItem("meScore_"+y,JSON.stringify(arr));}
 function saveMix(){const key="mix_"+mixYears.slice().sort().join("_");localStorage.setItem(key,JSON.stringify(mixData.map(x=>({id:x.id,score:Number(x.score)||0}))));}
+function resetMixScores(){if(!confirm("Обнулить все баллы в этом смешанном топе? Порядок песен останется без изменений."))return;mixData.forEach(s=>{s.score=0;syncMixScoreToSeason(s)});saveMix();renderMix();}
+function togglePointsMode(){if(pointsMode){finishPointsMode(true);return;}startPointsMode();}
+function startPointsMode(){pointsMode=true;pointAssignments=new Map();dragPoint=null;const panel=$("pointsPanel");panel.classList.add("active");$("pointsStart").style.display="none";$("pointsActiveContent").style.display="block";document.body.classList.add("points-mode");document.querySelectorAll(".point-pill").forEach(p=>p.classList.remove("assigned"));if(mixMode)renderMix();else render();syncPointSlots();}
+function endPointsMode(renderNow=true){pointsMode=false;pointAssignments=new Map();dragPoint=null;const panel=$("pointsPanel");panel.classList.remove("active");$("pointsStart").style.display="block";$("pointsActiveContent").style.display="none";document.body.classList.remove("points-mode");if(renderNow){if(mixMode)renderMix();else render();}}
+function finishPointsMode(renderNow=true){const target=mixMode?mixData:data;pointAssignments.forEach((pts,id)=>{const item=target.find(x=>String(x.id)===String(id));if(item){item.score=Math.min(1000,(Number(item.score)||0)+pts);if(mixMode)syncMixScoreToSeason(item);}});if(mixMode)saveMix();else save();endPointsMode(renderNow);}
+function syncPointSlots(){document.querySelectorAll(".points-slot").forEach(slot=>{const pts=pointAssignments.get(String(slot.dataset.id));slot.textContent=pts?`+${pts}`:"＋ очки";slot.classList.toggle("filled",!!pts)});document.querySelectorAll(".point-pill").forEach(p=>{const pts=Number(p.dataset.points);p.classList.toggle("assigned",[...pointAssignments.values()].includes(pts));});}
+function assignPointToSong(id,pts){id=String(id);pts=Number(pts);if(!pointsMode||!pts)return;for(const [sid,val] of pointAssignments){if(val===pts&&sid!==id)pointAssignments.delete(sid);}pointAssignments.delete(id);pointAssignments.set(id,pts);syncPointSlots();}
+function setupPointPills(){document.querySelectorAll(".point-pill").forEach(p=>{p.addEventListener("dragstart",e=>{dragPoint=Number(p.dataset.points);e.dataTransfer.setData("text/plain",String(dragPoint));e.dataTransfer.effectAllowed="copy"});p.addEventListener("dragend",()=>dragPoint=null);});}
+function bindPointSlot(slot){if(!slot)return;slot.addEventListener("dragover",e=>{if(pointsMode)e.preventDefault()});slot.addEventListener("drop",e=>{if(!pointsMode)return;e.preventDefault();assignPointToSong(slot.dataset.id,dragPoint||Number(e.dataTransfer.getData("text/plain")));});}
+setupPointPills();
 async function saveMixPNG(){const perCol=20,cols=Math.ceil(mixData.length/perCol),scale=1.0,colW=320,gap=18,pad=35,w=pad*2+cols*colW+(cols-1)*gap,rowH=54,top=125,rows=Math.min(perCol,mixData.length),h=top+rowH*rows+50,c=document.createElement("canvas");c.width=Math.round(w*scale);c.height=Math.round(h*scale);const ctx=c.getContext("2d");ctx.scale(scale,scale);const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,"#101010");g.addColorStop(1,"#332b00");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.fillStyle="#ffcc00";ctx.font="900 40px Comfortaa, Arial";ctx.fillText("EuroRanks",45,52);ctx.fillStyle="#ddd";ctx.font="700 20px Comfortaa, Arial";ctx.fillText(`Top ${mixData.length} • ${mixYears.slice().sort((a,b)=>b-a).join(" + ")}`,45,88);const imgs={};await Promise.all([...new Set(mixData.map(s=>s.flag))].map(code=>new Promise(resolve=>{const img=new Image();img.onload=()=>{imgs[code]=img;resolve()};img.onerror=()=>resolve();img.src=flagImg(code)})));mixData.forEach((s,i)=>{const col=Math.floor(i/perCol),row=i%perCol,x=pad+col*(colW+gap),y=top+row*rowH;ctx.fillStyle="#242424";round(ctx,x,y,colW,rowH-6,10);ctx.fill();ctx.fillStyle="#ffcc00";ctx.font="900 20px Comfortaa, Arial";ctx.textAlign="center";ctx.fillText(i+1,x+28,y+30);if(imgs[s.flag])ctx.drawImage(imgs[s.flag],x+48,y+10,28,20);ctx.textAlign="left";ctx.fillStyle="#fff";ctx.font="700 14px Comfortaa, Arial";ctx.fillText(s.country,x+82,y+21);ctx.fillStyle="#aaa";ctx.font="400 10px Comfortaa, Arial";const artist=s.artist+" — "+s.song;ctx.fillText(artist.length>34?artist.slice(0,32)+"…":artist,x+82,y+38);ctx.fillStyle="#666";ctx.font="400 10px Comfortaa, Arial";ctx.fillText(s.year,x+colW-34,y+21)});ctx.fillStyle="#777";ctx.font="400 12px Comfortaa, Arial";ctx.fillText("EuroRanks • your Eurovision ranking",45,h-16);const a=document.createElement("a");a.download=`EuroRanks_Mix_${mixYears.slice().sort().join("-")}.png`;a.href=c.toDataURL("image/png");a.click();}
 async function savePNG(){
   // 15 countries per column; raster scale reduced by ~1.5× from the previous version.
